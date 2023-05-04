@@ -17,6 +17,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String keyword = '';
+  final player = Get.find<AudioPlayer>();
   @override
   void initState() {
     // TODO: implement initState
@@ -28,7 +29,8 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+        body: SafeArea(
+      child: Column(
         children: [
           _buildSearchInput(),
           Expanded(
@@ -45,17 +47,23 @@ class _SearchPageState extends State<SearchPage> {
                       return FutureBuilder(
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              return snapshot.data!.isNotEmpty? ListView.builder(
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (context, index) {
-                                    var item = snapshot.data![index];
-                                    return ListTile(
-                                      title: Text(item!.name!),
-                                      subtitle: Text(item!.artists!.isNotEmpty
-                                          ? '【${item.platform}】${item!.artists![0].name!}'
-                                          : '未知'),
-                                    );
-                                  }): const Center(child: Text('没有找到相关歌曲'));
+                              return snapshot.data!.isNotEmpty
+                                  ? ListView.builder(
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        var item = snapshot.data![index];
+                                        return ListTile(
+                                          title: Text(item!.name!),
+                                          subtitle: Text(item!
+                                                  .artists!.isNotEmpty
+                                              ? '【${item.platform}】${item!.artists![0].name!}'
+                                              : '未知'),
+                                          onTap: () {
+                                            
+                                          },
+                                        );
+                                      })
+                                  : const Center(child: Text('没有找到相关歌曲'));
                             } else {
                               return const Center(
                                 child: CircularProgressIndicator(),
@@ -66,10 +74,10 @@ class _SearchPageState extends State<SearchPage> {
                   }
                 }()),
           ),
-          BottomPlayer(player: Get.find<AudioPlayer>())
+          BottomPlayer(player: player)
         ],
       ),
-    );
+    ));
   }
 
   final searchController = TextEditingController();
