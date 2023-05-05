@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -6,15 +7,15 @@ import 'package:get/get.dart';
 const jsonDecoder = JsonDecoder();
 final generalInterceptor = InterceptorsWrapper(
   onRequest: (options, handler) {
-    print('request: ${options.uri}');
+    log('request: ${options.uri}');
     return handler.next(options);
   },
   onResponse: (response, handler) {
-    print('response: 【${response.data.runtimeType}】$response');
+    log('response: 【${response.data.runtimeType}】$response');
     return handler.next(response);
   },
   onError: (DioError e, handler) {
-    print('error: ${e.message}');
+    log('error: ${e.message}');
     return handler.next(e);
   },
 );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gether_music/controller/global_player.dart';
 import 'package:gether_music/pages/search/index.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -10,7 +11,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   initDio();
-  Get.put(AudioPlayer());
+  Get.put(GloablPlayerController());
   runApp(const MyApp());
 }
 

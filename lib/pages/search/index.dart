@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:gether_music/component/bottom_player.dart';
+import 'package:gether_music/controller/global_player.dart';
 import 'package:gether_music/model/tong_zhong_search_entity.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -17,7 +20,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String keyword = '';
-  final player = Get.find<AudioPlayer>();
+  final controller = Get.find<GloablPlayerController>();
   @override
   void initState() {
     // TODO: implement initState
@@ -52,14 +55,25 @@ class _SearchPageState extends State<SearchPage> {
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
                                         var item = snapshot.data![index];
+                                        final artist = item!.artists!.isNotEmpty
+                                            ? item!.artists![0].name ?? '未知'
+                                            : '未知';
+
                                         return ListTile(
-                                          title: Text(item!.name!),
-                                          subtitle: Text(item!
-                                                  .artists!.isNotEmpty
-                                              ? '【${item.platform}】${item!.artists![0].name!}'
-                                              : '未知'),
-                                          onTap: () {
-                                            
+                                          title: Text(item.name!),
+                                          subtitle:
+                                              Text('【${item.platform}】$artist'),
+                                          onTap: () async {
+                                            var id = item.originalId ??
+                                                item.newId!.substring(1);
+                                            final url = await getSongSource(
+                                                item.platform!,
+                                                id);
+                                            controller.playList.add(Song(
+                                                name: item.name!,
+                                                singer: artist,
+                                                url: url));
+                                            log('add song ${item.name}');
                                           },
                                         );
                                       })
@@ -74,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
                   }
                 }()),
           ),
-          BottomPlayer(player: player)
+          BottomPlayer()
         ],
       ),
     ));

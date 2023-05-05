@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:gether_music/model/tongzhong_search_v2_entity.dart';
+import 'package:gether_music/model/tongzhong_song_entity.dart';
 import 'package:gether_music/util/dio.dart';
 
 import '../model/tong_zhong_search_entity.dart';
@@ -46,4 +47,10 @@ Future<List<TongZhongSearchSongs>> searchSong(String keyword) async {
 
   addRes1(await resFuzzy);
   return songs;
+}
+
+Future<String> getSongSource(String platform, String id) async {
+  final res = await dioMusicApi.get('/song_source/$platform/$id');
+  final entity = TongzhongSongEntity.fromJson(res.data);
+  return entity.data!.songSource!;
 }
