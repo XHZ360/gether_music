@@ -1,80 +1,122 @@
-import '../generated/json/base/json_convert_content.dart';
-import '../generated/json/base/json_field.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'tongzhong_entity.g.dart';
 
-abstract class TongzhongResponseEntity {
+@JsonSerializable(genericArgumentFactories: true)
+class TongzhongResponseEntity<T> {
   late bool success;
+  late T data;
+
+  TongzhongResponseEntity({required this.success, required this.data});
+
+  factory TongzhongResponseEntity.fromJson(
+          Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
+      _$TongzhongResponseEntityFromJson(json, fromJsonT);
 }
 
 // Tongzhong Search
-class TongZhongSearchEntity extends TongzhongResponseEntity
-    with JsonConvert<TongZhongSearchEntity> {
+@JsonSerializable()
+class TongZhongSearchEntity {
   late List<TongZhongSearchSongs> songs;
+  TongZhongSearchEntity({required this.songs});
+
+  factory TongZhongSearchEntity.fromJson(Map<String, dynamic> json) =>
+      _$TongZhongSearchEntityFromJson(json);
 }
 
-// Tongzhogn Api Search
-class TongZhongApiSearchEntity extends TongzhongResponseEntity
-    with JsonConvert<TongZhongApiSearchEntity> {
+// Tongzhong Api Search
+@JsonSerializable()
+class TongZhongApiSearchEntity {
   late TongZongApiSearchDataEntity data;
+  TongZhongApiSearchEntity({required this.data});
+
+  factory TongZhongApiSearchEntity.fromJson(Map<String, dynamic> json) =>
+      _$TongZhongApiSearchEntityFromJson(json);
 }
 
-class TongZongApiSearchDataEntity
-    with JsonConvert<TongZongApiSearchDataEntity> {
+@JsonSerializable()
+class TongZongApiSearchDataEntity {
   late List<TongZhongSearchSongs> songs;
+  TongZongApiSearchDataEntity({required this.songs});
+
+  factory TongZongApiSearchDataEntity.fromJson(Map<String, dynamic> json) =>
+      _$TongZongApiSearchDataEntityFromJson(json);
 }
 
-enum EnumTongzhongPlatform with JsonConvert<TongZongApiSearchDataEntity> {
-  qq(value: 'qq'),
-  kuwo(value: 'kuwo'),
-  neteasy(value: 'neteasy'),
-  unknown(value: "未知");
+@JsonEnum(valueField: 'value')
+enum TongzhongPlatform {
+  qq('qq'),
+  kuwo('kuwo'),
+  netease('netease'),
+  unknown('unknown'),
+  ;
 
-  const EnumTongzhongPlatform({required this.value});
+  const TongzhongPlatform(this.value);
   final String value;
-  factory EnumTongzhongPlatform.fromStr(String value) {
-    switch (value) {
-      case 'qq':
-        return EnumTongzhongPlatform.qq;
-      case 'kuwo':
-        return EnumTongzhongPlatform.kuwo;
-      case 'neteasy':
-        return EnumTongzhongPlatform.neteasy;
-      default:
-        return EnumTongzhongPlatform.unknown;
-    }
-  }
-  @override
-  toString() {
-    return value;
-  }
 }
 
-class TongZhongSearchSongs with JsonConvert<TongZhongSearchSongs> {
+@JsonSerializable()
+class TongZhongSearchSongs {
   String? originalId;
   String? newId;
   late String name;
-  late EnumTongzhongPlatform platform;
+  late TongzhongPlatform platform; //'qq' 'kuwo' 'netease'
   TongZhongSearchSongsAlbum? album;
   List<TongZhongSearchSongsArtists>? artists;
   String? alias;
   String? mvId;
+
+  TongZhongSearchSongs({
+    this.originalId,
+    this.newId,
+    required this.name,
+    required this.platform,
+    this.album,
+    this.artists,
+    this.alias,
+    this.mvId,
+  });
+
+  factory TongZhongSearchSongs.fromJson(Map<String, dynamic> json) =>
+      _$TongZhongSearchSongsFromJson(json);
 }
 
-class TongZhongSearchSongsAlbum with JsonConvert<TongZhongSearchSongsAlbum> {
+@JsonSerializable()
+class TongZhongSearchSongsAlbum {
   String? name;
   String? id;
+
+  TongZhongSearchSongsAlbum({this.name, this.id});
+
+  factory TongZhongSearchSongsAlbum.fromJson(Map<String, dynamic> json) =>
+      _$TongZhongSearchSongsAlbumFromJson(json);
 }
 
-class TongZhongSearchSongsArtists
-    with JsonConvert<TongZhongSearchSongsArtists> {
+@JsonSerializable()
+class TongZhongSearchSongsArtists {
   String? name;
   String? id;
+
+  TongZhongSearchSongsArtists({this.name, this.id});
+
+  factory TongZhongSearchSongsArtists.fromJson(Map<String, dynamic> json) =>
+      _$TongZhongSearchSongsArtistsFromJson(json);
 }
 
-class TongzhongSongEntity extends TongzhongResponseEntity
-    with JsonConvert<TongzhongSongEntity> {
+@JsonSerializable()
+class TongzhongSongEntity {
   late TongzhongSongData data;
+  TongzhongSongEntity({required this.data});
+
+  factory TongzhongSongEntity.fromJson(Map<String, dynamic> json) =>
+      _$TongzhongSongEntityFromJson(json);
 }
 
-class TongzhongSongData with JsonConvert<TongzhongSongEntity> {
+@JsonSerializable()
+class TongzhongSongData {
   late String songSource;
+
+  TongzhongSongData({required this.songSource});
+
+  factory TongzhongSongData.fromJson(Map<String, dynamic> json) =>
+      _$TongzhongSongDataFromJson(json);
 }

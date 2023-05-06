@@ -6,10 +6,10 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:gether_music/component/bottom_player.dart';
 import 'package:gether_music/controller/global_player.dart';
-import 'package:gether_music/model/tong_zhong_search_entity.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../controller/TongZhong.dart';
+import '../../model/tongzhong_entity.dart';
 
 class SearchPage extends StatefulWidget {
   final String initKeyword;
@@ -67,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
                                             var id = item.originalId ??
                                                 item.newId!.substring(1);
                                             final url = await getSongSource(
-                                                item.platform!,
+                                                item.platform,
                                                 id);
                                             controller.playList.add(Song(
                                                 name: item.name!,
