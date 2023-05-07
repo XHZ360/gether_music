@@ -1,3 +1,12 @@
 {
-  "cmake.sourceDirectory": "E:/Coding/Learn/Android/gether_music/windows/runner"
+  "cmake.sourceDirectory": "E:/Coding/Learn/Android/gether_music/windows/runner",
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+    // Remove .fvm files from search
+    "search.exclude": {
+      "**/.fvm": true
+    },
+    // Remove from file watching
+    "files.watcherExclude": {
+      "**/.fvm": true
+    }
 }
