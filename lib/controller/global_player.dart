@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -23,18 +25,32 @@ enum EnumPlayStatus {
 }
 
 class GloablPlayerController extends GetxController {
-  final _player = AudioPlayer();
+  final player = AudioPlayer();
   final playList = <Song>[].obs;
-  final status = EnumPlayStatus.stop.obs;
-  var currentSong = Rx<Song?>(null);
-  var order = LoopMode.all.obs;
+  final _status = EnumPlayStatus.stop.obs;
+  get status => _status;
+  Stream<PositionedData> get positionStream {
+    var positionedData = PositionedData(
+        position: 0.seconds, duration: 0.seconds, buffered: 0.seconds);
+    var controller = StreamController<PositionedData>();
+    player.positionStream.listen((event) {
+      positionedData.position = event;
+      controller.add(positionedData);
+    });
+    player.bufferedPositionStream.listen((event) {
+      positionedData.buffered = event;
+      controller.add(positionedData);
+    });
+    player.durationStream.listen((event) {
+      positionedData.duration = event ?? 0.seconds;
+      controller.add(positionedData);
+    });
+    return controller.stream;
+  }
+
   @override
   void onInit() {
-    // 更改order，同步更新_player LoopMode
-    ever(order, (callback) async {
-      await _player.setLoopMode(callback);
-    });
-
+    log('init');
     // 更改playList, 更新PlayerAudioSouce
     ever(playList, (callback) async {
       var validPlayList = <Song>[];
@@ -50,33 +66,48 @@ class GloablPlayerController extends GetxController {
           }
         }
       }
-      await _player
+      await player
           .setAudioSource(ConcatenatingAudioSource(children: audioSouceList));
       callback = validPlayList;
       if (playList.isNotEmpty && status.value == EnumPlayStatus.stop) {
         status.value = EnumPlayStatus.pause;
       }
     });
-    // 更改status，对player进行操作
-    ever(
-        status,
-        (callback) async => {
-              if (callback == EnumPlayStatus.playing)
-                {await _player.play()}
-              else if (callback == EnumPlayStatus.pause)
-                {await _player.pause()}
-              else if (callback == EnumPlayStatus.stop)
-                {await _player.stop()}
-            });
-
-    _player.currentIndexStream.listen((event) {
-      if (event != null) {
-        currentSong.value = playList[event];
-        log('change current song to $event');
+    ever(status, (callback) {
+      log('$callback');
+      switch (status.value) {
+        case EnumPlayStatus.playing:
+          player.play();
+          break;
+        case EnumPlayStatus.pause:
+          player.pause();
+          break;
+        case EnumPlayStatus.stop:
+          player.stop();
+          break;
+        default:
+          log('unknown status');
       }
     });
-
-    // TODO: implement onInit
+    _init();
     super.onInit();
   }
+
+  _init() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+    // Listen to errors during playback.
+    player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace stackTrace) {
+      log('A stream error occurred: $e');
+    });
+  }
+}
+
+class PositionedData {
+  Duration position;
+  Duration duration;
+  Duration buffered;
+  PositionedData(
+      {required this.position, required this.duration, required this.buffered});
 }

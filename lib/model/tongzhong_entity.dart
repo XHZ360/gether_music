@@ -47,6 +47,7 @@ enum TongzhongPlatform {
   qq('qq'),
   kuwo('kuwo'),
   netease('netease'),
+  m('m'),
   unknown('unknown'),
   ;
 
@@ -56,14 +57,14 @@ enum TongzhongPlatform {
 
 @JsonSerializable()
 class TongZhongSearchSongs {
-  String? originalId;
+  dynamic originalId;
   String? newId;
   late String name;
   late TongzhongPlatform platform; //'qq' 'kuwo' 'netease'
   TongZhongSearchSongsAlbum? album;
   List<TongZhongSearchSongsArtists>? artists;
   String? alias;
-  String? mvId;
+  dynamic mvId;
 
   TongZhongSearchSongs({
     this.originalId,
@@ -83,7 +84,7 @@ class TongZhongSearchSongs {
 @JsonSerializable()
 class TongZhongSearchSongsAlbum {
   String? name;
-  String? id;
+  dynamic id;
 
   TongZhongSearchSongsAlbum({this.name, this.id});
 
@@ -94,7 +95,7 @@ class TongZhongSearchSongsAlbum {
 @JsonSerializable()
 class TongZhongSearchSongsArtists {
   String? name;
-  String? id;
+  dynamic id;
 
   TongZhongSearchSongsArtists({this.name, this.id});
 

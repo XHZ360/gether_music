@@ -68,7 +68,7 @@ Map<String, dynamic> _$TongZongApiSearchDataEntityToJson(
 TongZhongSearchSongs _$TongZhongSearchSongsFromJson(
         Map<String, dynamic> json) =>
     TongZhongSearchSongs(
-      originalId: json['originalId'] as String?,
+      originalId: json['originalId'],
       newId: json['newId'] as String?,
       name: json['name'] as String,
       platform: $enumDecode(_$TongzhongPlatformEnumMap, json['platform']),
@@ -81,7 +81,7 @@ TongZhongSearchSongs _$TongZhongSearchSongsFromJson(
               TongZhongSearchSongsArtists.fromJson(e as Map<String, dynamic>))
           .toList(),
       alias: json['alias'] as String?,
-      mvId: json['mvId'] as String?,
+      mvId: json['mvId'],
     );
 
 Map<String, dynamic> _$TongZhongSearchSongsToJson(
@@ -101,6 +101,7 @@ const _$TongzhongPlatformEnumMap = {
   TongzhongPlatform.qq: 'qq',
   TongzhongPlatform.kuwo: 'kuwo',
   TongzhongPlatform.netease: 'netease',
+  TongzhongPlatform.m: 'm',
   TongzhongPlatform.unknown: 'unknown',
 };
 
@@ -108,7 +109,7 @@ TongZhongSearchSongsAlbum _$TongZhongSearchSongsAlbumFromJson(
         Map<String, dynamic> json) =>
     TongZhongSearchSongsAlbum(
       name: json['name'] as String?,
-      id: json['id'] as String?,
+      id: json['id'],
     );
 
 Map<String, dynamic> _$TongZhongSearchSongsAlbumToJson(
@@ -122,7 +123,7 @@ TongZhongSearchSongsArtists _$TongZhongSearchSongsArtistsFromJson(
         Map<String, dynamic> json) =>
     TongZhongSearchSongsArtists(
       name: json['name'] as String?,
-      id: json['id'] as String?,
+      id: json['id'],
     );
 
 Map<String, dynamic> _$TongZhongSearchSongsArtistsToJson(

@@ -4,6 +4,9 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
+const connectionTimeout = Duration(seconds: 8);
+const receivedTimeout = null;
+
 const jsonDecoder = JsonDecoder();
 final generalInterceptor = InterceptorsWrapper(
   onRequest: (options, handler) {
@@ -16,18 +19,19 @@ final generalInterceptor = InterceptorsWrapper(
   },
   onError: (DioError e, handler) {
     log('error: ${e.message}');
-    return handler.next(e);
+    Get.snackbar('错误', e.message ?? '未知错误');
+    // return handler.next(e);
   },
 );
 final dioTongZhong = Dio(BaseOptions(
   baseUrl: 'https://tonzhon.com/api',
-  connectTimeout: 5.seconds,
-  receiveTimeout: 3.seconds,
+  connectTimeout: connectionTimeout,
+  receiveTimeout: receivedTimeout,
 ));
 final dioMusicApi = Dio(BaseOptions(
   baseUrl: 'https://music-api.tonzhon.com',
-  connectTimeout: 5.seconds,
-  receiveTimeout: 3.seconds,
+  connectTimeout: connectionTimeout,
+  receiveTimeout: receivedTimeout,
 ));
 
 initDio() {

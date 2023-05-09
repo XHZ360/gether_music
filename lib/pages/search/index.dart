@@ -1,12 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:gether_music/component/bottom_player.dart';
 import 'package:gether_music/controller/global_player.dart';
-import 'package:just_audio/just_audio.dart';
 
 import '../../controller/TongZhong.dart';
 import '../../model/tongzhong_entity.dart';
@@ -23,7 +20,6 @@ class _SearchPageState extends State<SearchPage> {
   final controller = Get.find<GloablPlayerController>();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     keyword = widget.initKeyword;
   }
@@ -39,7 +35,6 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
             child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.circular(8)),
                 margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: () {
@@ -62,7 +57,7 @@ class _SearchPageState extends State<SearchPage> {
                                         return ListTile(
                                           title: Text(item.name!),
                                           subtitle:
-                                              Text('【${item.platform}】$artist'),
+                                              Text('【${item.platform.value}】$artist'),
                                           onTap: () async {
                                             var id = item.originalId ??
                                                 item.newId!.substring(1);
@@ -70,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
                                                 item.platform,
                                                 id);
                                             controller.playList.add(Song(
-                                                name: item.name!,
+                                                name: item.name,
                                                 singer: artist,
                                                 url: url));
                                             log('add song ${item.name}');

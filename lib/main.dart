@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: 'Gether Music',
       theme: ThemeData(),
+      darkTheme: ThemeData.dark(),
       home: const SearchPage(),
     );
   }

@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.5
   just_audio: ^0.9.32
   json_annotation: ^4.8.1
+  audio_session: ^0.1.13
 
 dev_dependencies:
   flutter_test:
